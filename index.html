@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Google Fonts -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="path/to/font-awesome/css/font-awesome.min.css"
+    />
+    <!-- CSS -->
+    <link rel="stylesheet" href="./SCSS_CSS/index.css" class="" />
+
+    <!-- BOOTSTRAP -->
+    <!-- <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  /> -->
+    <!-- FONT -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="./assets/img/magiccode.png" />
+    <!-- JavaScript -->
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script src="./JS/main.js"></script>
+    <title>To Do Web</title>
+  </head>
+  <body>
+    <header>
+      <h1>My List</h1>
+    </header>
+    <form action="">
+      <div class="select">
+        <select name="todos" class="filter-todo">
+          <option value="all">Tất Cả</option>
+          <option value="completed">Hoàn Thành</option>
+          <option value="incomplete">Thực Hiện</option>
+        </select>
+      </div>
+      <input type="text" class="todo-input" />
+      <button class="todo-button" type="submit">ADD</button>
+    </form>
+
+    <div class="todo-container">
+      <ul class="todo-list"></ul>
+    </div>
+    <script src="./JS/main.js"></script>
+  </body>
+</html>
