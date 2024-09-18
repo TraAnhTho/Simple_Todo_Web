@@ -20,8 +20,8 @@ header {
 header,
 form {
   min-height: 20vh;
-    display: flex;
-  //   justify-content: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -132,7 +132,7 @@ select {
   position: relative;
   overflow: hidden;
   border-radius: 50px;
-//   width: 50%;
+  //   width: 50%;
 }
 
 select {
