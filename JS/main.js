@@ -8,27 +8,31 @@ todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("change", filterTodo);
 
-// Hàm lấy thời gian hiện tại
-function showCurrentTime() {
-  const now = new Date();
-  const hours = now.getHours();
-  const minutes = now.getMinutes();
-  const seconds = now.getSeconds();
+// // Hàm lấy thời gian hiện tại
+// function showCurrentTime() {
+//   const now = new Date();
+//   let timenow = now; // Gán biến now cho timenow (nếu thực sự cần)
+//   const hours = timenow.getHours();
+//   const minutes = timenow.getMinutes();
+//   const seconds = timenow.getSeconds();
 
-  // Định dạng lại nếu giá trị nhỏ hơn 10 thì thêm số 0
-  const formattedTime =
-    (hours < 10 ? "0" : "") +
-    hours +
-    ":" +
-    (minutes < 10 ? "0" : "") +
-    minutes +
-    ":" +
-    (seconds < 10 ? "0" : "") +
-    seconds;
+//   // Định dạng lại nếu giá trị nhỏ hơn 10 thì thêm số 0
+//   const formattedTime =
+//     (hours < 10 ? "0" : "") +
+//     hours +
+//     ":" +
+//     (minutes < 10 ? "0" : "") +
+//     minutes +
+//     ":" +
+//     (seconds < 10 ? "0" : "") +
+//     seconds;
 
-  // Hiển thị thời gian vào thẻ p với id là currentTime
-  document.getElementById("currentTime").textContent = formattedTime;
-}
+//   // Hiển thị thời gian vào thẻ p với id là currentTime
+
+//   document.getElementById("currentTime").textContent = formattedTime;
+// }
+// //  gọi hàm
+// showCurrentTime();
 
 function addTodo(event) {
   event.preventDefault();
@@ -45,9 +49,46 @@ function addTodo(event) {
 
     newTodo.classList.add("todo-item");
     todoDiv.appendChild(newTodo);
+
+    // Lấy ngày tháng năm và giờ phút giây hiện tại
+    const now = new Date();
+    const day = now.getDate();
+    const month = now.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0 nên cần +1
+    const year = now.getFullYear();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // Định dạng ngày tháng và thời gian
+    const formattedTime =
+      (day < 10 ? "0" : "") +
+      day +
+      "/" +
+      (month < 10 ? "0" : "") +
+      month +
+      "/" +
+      year +
+      " " +
+      (hours < 10 ? "0" : "") +
+      hours +
+      ":" +
+      (minutes < 10 ? "0" : "") +
+      minutes +
+      ":" +
+      (seconds < 10 ? "0" : "") +
+      seconds;
+
+    // Tạo phần tử hiển thị thời gian và ngày tháng
+    const timeSpan = document.createElement("span");
+    timeSpan.innerText = " (Created at: " + formattedTime + ")";
+    todoDiv.appendChild(timeSpan);
+
+    // Lưu cả nội dung và thời gian vào localStorage
+    saveLocalTodos({ text: todoInput.value, time: formattedTime });
+
     //ADDING TO LOCAL STORAGE
 
-    saveLocalTodos(todoInput.value);
+    // saveLocalTodos(todoInput.value);
 
     const completedButton = document.createElement("button");
     completedButton.innerHTML = "ok";
@@ -118,9 +159,46 @@ function saveLocalTodos(todo) {
   } else {
     todos = JSON.parse(localStorage.getItem("todos"));
   }
+  // Lưu cả text và time dưới dạng đối tượng
   todos.push(todo);
   localStorage.setItem("todos", JSON.stringify(todos));
 }
+
+// function getLocalTodos() {
+//   let todos;
+//   if (localStorage.getItem("todos") === null) {
+//     todos = [];
+//   } else {
+//     todos = JSON.parse(localStorage.getItem("todos"));
+//   }
+//   todos.forEach(function (todo) {
+//     const todoDiv = document.createElement("div");
+//     todoDiv.classList.add("todo");
+//     const newTodo = document.createElement("li");
+//     newTodo.innerText = todo;
+//     newTodo.classList.add("todo-item");
+//     todoDiv.appendChild(newTodo);
+
+//     // // Hiển thị thời gian tạo to-do
+//     // const timeSpan = document.createElement("span");
+//     // timeSpan.innerText = " (Created at: " + todo.time + ")";
+//     // todoDiv.appendChild(timeSpan);
+
+//     const completedButton = document.createElement("button");
+//     completedButton.innerHTML = "ok";
+
+//     completedButton.classList.add("complete-btn");
+//     todoDiv.appendChild(completedButton);
+
+//     const trashButton = document.createElement("button");
+//     trashButton.innerHTML = "X";
+
+//     trashButton.classList.add("trash-btn");
+//     todoDiv.appendChild(trashButton);
+
+//     todoList.appendChild(todoDiv);
+//   });
+// }
 
 function getLocalTodos() {
   let todos;
@@ -129,23 +207,28 @@ function getLocalTodos() {
   } else {
     todos = JSON.parse(localStorage.getItem("todos"));
   }
+
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
+
     const newTodo = document.createElement("li");
-    newTodo.innerText = todo;
+    newTodo.innerText = todo.text; // Nội dung công việc
     newTodo.classList.add("todo-item");
     todoDiv.appendChild(newTodo);
 
+    // Hiển thị thời gian tạo to-do
+    const timeSpan = document.createElement("span");
+    timeSpan.innerText = " (Created at: " + todo.time + ")";
+    todoDiv.appendChild(timeSpan);
+
     const completedButton = document.createElement("button");
     completedButton.innerHTML = "ok";
-
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
 
     const trashButton = document.createElement("button");
     trashButton.innerHTML = "X";
-
     trashButton.classList.add("trash-btn");
     todoDiv.appendChild(trashButton);
 
