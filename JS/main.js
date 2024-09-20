@@ -8,37 +8,20 @@ todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("change", filterTodo);
 
-// // Hàm lấy thời gian hiện tại
-// function showCurrentTime() {
-//   const now = new Date();
-//   let timenow = now; // Gán biến now cho timenow (nếu thực sự cần)
-//   const hours = timenow.getHours();
-//   const minutes = timenow.getMinutes();
-//   const seconds = timenow.getSeconds();
-
-//   // Định dạng lại nếu giá trị nhỏ hơn 10 thì thêm số 0
-//   const formattedTime =
-//     (hours < 10 ? "0" : "") +
-//     hours +
-//     ":" +
-//     (minutes < 10 ? "0" : "") +
-//     minutes +
-//     ":" +
-//     (seconds < 10 ? "0" : "") +
-//     seconds;
-
-//   // Hiển thị thời gian vào thẻ p với id là currentTime
-
-//   document.getElementById("currentTime").textContent = formattedTime;
-// }
-// //  gọi hàm
-// showCurrentTime();
-
 function addTodo(event) {
   event.preventDefault();
   const todoDiv = document.createElement("div");
   console.log(todoDiv);
   todoDiv.classList.add("todo");
+
+  // todoDiv.setAttribute("draggable", "true"); // Cho phép kéo thả
+  // todoDiv.setAttribute("data-index", todoList.children.length); // Lưu vị trí ban đầu
+
+  // todoDiv.addEventListener("dragstart", dragStart);
+  // todoDiv.addEventListener("dragover", dragOver);
+  // todoDiv.addEventListener("drop", drop);
+  // todoDiv.addEventListener("dragend", dragEnd);
+
   const newTodo = document.createElement("li");
   newTodo.innerText = todoInput.value;
   console.log(todoInput.value);
@@ -87,7 +70,6 @@ function addTodo(event) {
     saveLocalTodos({ text: todoInput.value, time: formattedTime });
 
     //ADDING TO LOCAL STORAGE
-
     // saveLocalTodos(todoInput.value);
 
     const completedButton = document.createElement("button");
@@ -108,6 +90,38 @@ function addTodo(event) {
   }
 }
 
+// let dragSrcEl = null;
+//
+// function dragStart(e) {
+//   this.style.opacity = "0.4"; // Giảm độ trong suốt của phần tử khi bắt đầu kéo
+//   dragSrcEl = this; // Lưu phần tử đang được kéo
+//   e.dataTransfer.effectAllowed = "move"; // Hiệu ứng di chuyển
+//   e.dataTransfer.setData("text/html", this.innerHTML); // Lưu nội dung
+// }
+//
+// function dragOver(e) {
+//   e.preventDefault(); // Cho phép thả
+//   e.dataTransfer.dropEffect = "move"; // Hiệu ứng di chuyển
+//   return false;
+// }
+//
+// function drop(e) {
+//   e.stopPropagation(); // Ngăn sự kiện mặc định
+//
+//   // Kiểm tra xem không thả vào chính nó
+//   if (dragSrcEl !== this) {
+//     // Hoán đổi nội dung giữa hai phần tử
+//     dragSrcEl.innerHTML = this.innerHTML;
+//     this.innerHTML = e.dataTransfer.getData("text/html");
+//   }
+//
+//   return false;
+// }
+//
+// function dragEnd(e) {
+//   this.style.opacity = "1"; // Khôi phục độ trong suốt
+// }
+
 function deleteCheck(e) {
   const item = e.target;
 
@@ -127,31 +141,6 @@ function deleteCheck(e) {
   }
 }
 
-function filterTodo(e) {
-  const todos = todoList.childNodes;
-  todos.forEach(function (todo) {
-    switch (e.target.value) {
-      case "all":
-        todo.style.display = "flex";
-        break;
-      case "completed":
-        if (todo.classList.contains("completed")) {
-          todo.style.display = "flex";
-        } else {
-          todo.style.display = "none";
-        }
-        break;
-      case "incomplete":
-        if (!todo.classList.contains("completed")) {
-          todo.style.display = "flex";
-        } else {
-          todo.style.display = "none";
-        }
-        break;
-    }
-  });
-}
-
 function saveLocalTodos(todo) {
   let todos;
   if (localStorage.getItem("todos") === null) {
@@ -164,42 +153,6 @@ function saveLocalTodos(todo) {
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
-// function getLocalTodos() {
-//   let todos;
-//   if (localStorage.getItem("todos") === null) {
-//     todos = [];
-//   } else {
-//     todos = JSON.parse(localStorage.getItem("todos"));
-//   }
-//   todos.forEach(function (todo) {
-//     const todoDiv = document.createElement("div");
-//     todoDiv.classList.add("todo");
-//     const newTodo = document.createElement("li");
-//     newTodo.innerText = todo;
-//     newTodo.classList.add("todo-item");
-//     todoDiv.appendChild(newTodo);
-
-//     // // Hiển thị thời gian tạo to-do
-//     // const timeSpan = document.createElement("span");
-//     // timeSpan.innerText = " (Created at: " + todo.time + ")";
-//     // todoDiv.appendChild(timeSpan);
-
-//     const completedButton = document.createElement("button");
-//     completedButton.innerHTML = "ok";
-
-//     completedButton.classList.add("complete-btn");
-//     todoDiv.appendChild(completedButton);
-
-//     const trashButton = document.createElement("button");
-//     trashButton.innerHTML = "X";
-
-//     trashButton.classList.add("trash-btn");
-//     todoDiv.appendChild(trashButton);
-
-//     todoList.appendChild(todoDiv);
-//   });
-// }
-
 function getLocalTodos() {
   let todos;
   if (localStorage.getItem("todos") === null) {
@@ -211,6 +164,14 @@ function getLocalTodos() {
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
+
+    // todoDiv.setAttribute("draggable", "true");
+    // todoDiv.setAttribute("data-index", index);
+
+    // todoDiv.addEventListener("dragstart", dragStart);
+    // todoDiv.addEventListener("dragover", dragOver);
+    // todoDiv.addEventListener("drop", drop);
+    // todoDiv.addEventListener("dragend", dragEnd);
 
     const newTodo = document.createElement("li");
     newTodo.innerText = todo.text; // Nội dung công việc
@@ -248,3 +209,55 @@ function removeLocalTodos(todo) {
   todos.splice(todos.indexOf(todoIndex), 1);
   localStorage.setItem("todos", JSON.stringify(todos));
 }
+
+function filterTodo(e) {
+  const todos = todoList.children;
+  // Sử dụng children thay vì childNodes
+  Array.from(todos).forEach(function (todo) {
+    // Chuyển NodeList thành mảng để dùng forEach
+    switch (e.target.value) {
+      case "all":
+        todo.style.display = "flex";
+        break;
+      case "completed":
+        if (todo.classList.contains("completed")) {
+          todo.style.display = "flex";
+        } else {
+          todo.style.display = "none";
+        }
+        break;
+      case "incomplete":
+        if (!todo.classList.contains("completed")) {
+          todo.style.display = "flex";
+        } else {
+          todo.style.display = "none";
+        }
+        break;
+    }
+  });
+}
+
+// function drop(e) {
+//   e.stopPropagation(); // Ngăn sự kiện mặc định
+
+//   if (dragSrcEl !== this) {
+//     // Hoán đổi nội dung giữa hai phần tử
+//     dragSrcEl.innerHTML = this.innerHTML;
+//     this.innerHTML = e.dataTransfer.getData("text/html");
+
+//     // Cập nhật lại localStorage
+//     updateLocalTodos();
+//   }
+
+//   return false;
+// }
+
+// function updateLocalTodos() {
+//   let todos = [];
+//   const items = document.querySelectorAll(".todo-item");
+//   items.forEach((item) => {
+//     todos.push(item.innerText);
+//   });
+
+//   localStorage.setItem("todos", JSON.stringify(todos));
+// }

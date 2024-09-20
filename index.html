@@ -30,7 +30,7 @@
       href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
       rel="stylesheet"
     />
-    <link rel="icon" type="image/x-icon" href="./assets/img/magiccode.png" />
+    <link rel="icon" type="image/x-icon" href="./IMG/embe.png" />
     <!-- JavaScript -->
     <!-- <script
       type="text/javascript"
@@ -47,6 +47,8 @@
     </header>
     <form action="">
       <div class="select">
+        <label for="filter-type">State:</label>
+
         <select name="todos" class="filter-todo">
           <option value="all">Tất Cả</option>
           <option value="completed">Hoàn Thành</option>
@@ -54,7 +56,17 @@
         </select>
       </div>
       <input type="text" class="todo-input" />
-      <button class="todo-button" type="submit">ADD</button>
+      <button class="todo-button" type="submit">+</button>
+
+      <div class="select">
+      <label for="filter-type">Loại:</label>
+      <select id="filter-type" class="filter-type">
+        <option value="all">Tất cả</option>
+        <option value="personal">Cá nhân</option>
+        <option value="work">Công việc</option>
+        <option value="shopping">Mua sắm</option>
+      </select>
+    </div>
     </form>
 
     <div class="todo-container">
