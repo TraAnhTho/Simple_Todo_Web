@@ -14,14 +14,6 @@ function addTodo(event) {
   console.log(todoDiv);
   todoDiv.classList.add("todo");
 
-  // todoDiv.setAttribute("draggable", "true"); // Cho phép kéo thả
-  // todoDiv.setAttribute("data-index", todoList.children.length); // Lưu vị trí ban đầu
-
-  // todoDiv.addEventListener("dragstart", dragStart);
-  // todoDiv.addEventListener("dragover", dragOver);
-  // todoDiv.addEventListener("drop", drop);
-  // todoDiv.addEventListener("dragend", dragEnd);
-
   const newTodo = document.createElement("li");
   newTodo.innerText = todoInput.value;
   console.log(todoInput.value);
@@ -69,9 +61,55 @@ function addTodo(event) {
     // Lưu cả nội dung và thời gian vào localStorage
     saveLocalTodos({ text: todoInput.value, time: formattedTime });
 
+    // Tạo div chứa các nút trạng thái
+    const statusDiv = document.createElement("div");
+    statusDiv.classList.add("status-buttons");
+
+    const greenButton = document.createElement("button");
+    greenButton.classList.add("green-btn");
+    greenButton.innerHTML = "O";
+    greenButton.style.backgroundColor = "lightgreen"; // Gắn màu cho nút
+
+    statusDiv.appendChild(greenButton);
+
+    const blueButton = document.createElement("button");
+    blueButton.classList.add("blue-btn");
+    blueButton.style.backgroundColor = "lightblue"; // Gắn màu cho nút
+
+    blueButton.innerHTML = "O";
+
+    statusDiv.appendChild(blueButton);
+
+    const yellowButton = document.createElement("button");
+    yellowButton.classList.add("yellow-btn");
+    yellowButton.style.backgroundColor = "lightyellow"; // Gắn màu cho nút
+
+    yellowButton.innerHTML = "O";
+
+    statusDiv.appendChild(yellowButton);
+
+    todoDiv.appendChild(statusDiv); // Thêm div trạng thái vào to-do item
+
+    greenButton.addEventListener("click", () => {
+      alert("Task marked as completed!");
+      todoDiv.style.backgroundColor = "lightgreen"; // Đổi màu của todo
+      updateLocalTodoColor(todoInput.value, "lightgreen"); // Lưu màu vào localStorage
+    });
+
+    blueButton.addEventListener("click", () => {
+      alert("Blue button clicked!");
+      todoDiv.style.backgroundColor = "lightblue"; // Đổi màu của todo
+      updateLocalTodoColor(todoInput.value, "lightblue"); // Lưu màu vào localStorage
+    });
+
+    yellowButton.addEventListener("click", () => {
+      alert("Yellow button clicked!");
+      todoDiv.style.backgroundColor = "lightyellow"; // Đổi màu của todo
+      updateLocalTodoColor(todoInput.value, "lightyellow"); // Lưu màu vào localStorage
+    });
+
     //ADDING TO LOCAL STORAGE
     // saveLocalTodos(todoInput.value);
-
     const completedButton = document.createElement("button");
     completedButton.innerHTML = "ok";
     completedButton.classList.add("complete-btn");
@@ -89,38 +127,6 @@ function addTodo(event) {
     console.log("chay else");
   }
 }
-
-// let dragSrcEl = null;
-//
-// function dragStart(e) {
-//   this.style.opacity = "0.4"; // Giảm độ trong suốt của phần tử khi bắt đầu kéo
-//   dragSrcEl = this; // Lưu phần tử đang được kéo
-//   e.dataTransfer.effectAllowed = "move"; // Hiệu ứng di chuyển
-//   e.dataTransfer.setData("text/html", this.innerHTML); // Lưu nội dung
-// }
-//
-// function dragOver(e) {
-//   e.preventDefault(); // Cho phép thả
-//   e.dataTransfer.dropEffect = "move"; // Hiệu ứng di chuyển
-//   return false;
-// }
-//
-// function drop(e) {
-//   e.stopPropagation(); // Ngăn sự kiện mặc định
-//
-//   // Kiểm tra xem không thả vào chính nó
-//   if (dragSrcEl !== this) {
-//     // Hoán đổi nội dung giữa hai phần tử
-//     dragSrcEl.innerHTML = this.innerHTML;
-//     this.innerHTML = e.dataTransfer.getData("text/html");
-//   }
-//
-//   return false;
-// }
-//
-// function dragEnd(e) {
-//   this.style.opacity = "1"; // Khôi phục độ trong suốt
-// }
 
 function deleteCheck(e) {
   const item = e.target;
@@ -148,8 +154,14 @@ function saveLocalTodos(todo) {
   } else {
     todos = JSON.parse(localStorage.getItem("todos"));
   }
-  // Lưu cả text và time dưới dạng đối tượng
-  todos.push(todo);
+
+  // Lưu thông tin của todo bao gồm cả trạng thái màu
+  todos.push({
+    text: todo.text,
+    time: todo.time,
+    color: todo.color || "", // Lưu màu nếu có, nếu chưa chọn thì để trống
+  });
+
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
@@ -165,14 +177,6 @@ function getLocalTodos() {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
 
-    // todoDiv.setAttribute("draggable", "true");
-    // todoDiv.setAttribute("data-index", index);
-
-    // todoDiv.addEventListener("dragstart", dragStart);
-    // todoDiv.addEventListener("dragover", dragOver);
-    // todoDiv.addEventListener("drop", drop);
-    // todoDiv.addEventListener("dragend", dragEnd);
-
     const newTodo = document.createElement("li");
     newTodo.innerText = todo.text; // Nội dung công việc
     newTodo.classList.add("todo-item");
@@ -182,6 +186,56 @@ function getLocalTodos() {
     const timeSpan = document.createElement("span");
     timeSpan.innerText = " (Created at: " + todo.time + ")";
     todoDiv.appendChild(timeSpan);
+
+    // Khôi phục màu sắc
+    if (todo.color) {
+      todoDiv.style.backgroundColor = todo.color;
+    }
+
+    // Tạo lại các nút trạng thái
+    const statusDiv = document.createElement("div");
+    statusDiv.classList.add("status-buttons");
+
+    const greenButton = document.createElement("button");
+    greenButton.classList.add("green-btn");
+    greenButton.innerHTML = "O";
+    greenButton.style.backgroundColor = "lightgreen"; // Gắn màu cho nút
+
+    statusDiv.appendChild(greenButton);
+
+    const blueButton = document.createElement("button");
+    blueButton.classList.add("blue-btn");
+    blueButton.innerHTML = "O";
+    blueButton.style.backgroundColor = "lightblue"; // Gắn màu cho nút
+
+    statusDiv.appendChild(blueButton);
+
+    const yellowButton = document.createElement("button");
+    yellowButton.classList.add("yellow-btn");
+    yellowButton.innerHTML = "O";
+    yellowButton.style.backgroundColor = "lightyellow"; // Gắn màu cho nút
+
+    statusDiv.appendChild(yellowButton);
+
+    todoDiv.appendChild(statusDiv); // Thêm div trạng thái vào to-do item
+
+    greenButton.addEventListener("click", () => {
+      alert("Task marked as completed!");
+      todoDiv.style.backgroundColor = "lightgreen"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightgreen"); // Lưu màu vào localStorage
+    });
+
+    blueButton.addEventListener("click", () => {
+      alert("Blue button clicked!");
+      todoDiv.style.backgroundColor = "lightblue"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightblue"); // Lưu màu vào localStorage
+    });
+
+    yellowButton.addEventListener("click", () => {
+      alert("Yellow button clicked!");
+      todoDiv.style.backgroundColor = "lightyellow"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightyellow"); // Lưu màu vào localStorage
+    });
 
     const completedButton = document.createElement("button");
     completedButton.innerHTML = "ok";
@@ -236,28 +290,19 @@ function filterTodo(e) {
     }
   });
 }
+function updateLocalTodoColor(todoText, color) {
+  let todos;
+  if (localStorage.getItem("todos") === null) {
+    todos = [];
+  } else {
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
 
-// function drop(e) {
-//   e.stopPropagation(); // Ngăn sự kiện mặc định
+  todos.forEach((todo) => {
+    if (todo.text === todoText) {
+      todo.color = color; // Cập nhật màu mới
+    }
+  });
 
-//   if (dragSrcEl !== this) {
-//     // Hoán đổi nội dung giữa hai phần tử
-//     dragSrcEl.innerHTML = this.innerHTML;
-//     this.innerHTML = e.dataTransfer.getData("text/html");
-
-//     // Cập nhật lại localStorage
-//     updateLocalTodos();
-//   }
-
-//   return false;
-// }
-
-// function updateLocalTodos() {
-//   let todos = [];
-//   const items = document.querySelectorAll(".todo-item");
-//   items.forEach((item) => {
-//     todos.push(item.innerText);
-//   });
-
-//   localStorage.setItem("todos", JSON.stringify(todos));
-// }
+  localStorage.setItem("todos", JSON.stringify(todos));
+}

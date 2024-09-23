@@ -15,6 +15,10 @@
     />
     <!-- CSS -->
     <link rel="stylesheet" href="./SCSS_CSS/index.css" class="" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
 
     <!-- BOOTSTRAP -->
     <!-- <link
@@ -58,19 +62,25 @@
       <input type="text" class="todo-input" />
       <button class="todo-button" type="submit">+</button>
 
-      <div class="select">
-      <label for="filter-type">Loại:</label>
-      <select id="filter-type" class="filter-type">
-        <option value="all">Tất cả</option>
-        <option value="personal">Cá nhân</option>
-        <option value="work">Công việc</option>
-        <option value="shopping">Mua sắm</option>
-      </select>
-    </div>
+      <!-- <div class="select">
+        <label for="filter-type">Loại:</label>
+        <select id="filter-type" class="filter-type">
+          <option value="all">Tất cả</option>
+          <option value="personal">Cá nhân</option>
+          <option value="work">Công việc</option>
+          <option value="shopping">Quan trọng</option>
+        </select>
+      </div> -->
     </form>
 
     <div class="todo-container">
       <ul class="todo-list" id="currentTime">
+        <div class="status-buttons">
+          <button class="green-btn" style="background-color: green">O</button>
+          <button class="blue-btn" style="background-color: blue">O</button>
+          <button class="yellow-btn" style="background-color: yellow">O</button>
+        </div>
+
         <!-- <p id="currentTime"></p> -->
       </ul>
     </div>

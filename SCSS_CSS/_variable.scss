@@ -8,3 +8,34 @@ $color_opacity: linear-gradient(
 );
 $color_passion: linear-gradient(90deg, #feadb9, #487ba6);
 $color-gray-200: #e1e8ed93;
+
+.status-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.green-btn,
+.blue-btn,
+.yellow-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.green-btn {
+  background-color: green;
+  color: white;
+}
+
+.blue-btn {
+  background-color: blue;
+  color: white;
+}
+
+.yellow-btn {
+  background-color: yellow;
+  color: white;
+}
