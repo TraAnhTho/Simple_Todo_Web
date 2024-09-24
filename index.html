@@ -5,20 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Fonts -->
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    />
-    <link
+    /> -->
+    <!-- <link
       rel="stylesheet"
       href="path/to/font-awesome/css/font-awesome.min.css"
-    />
+    /> -->
     <!-- CSS -->
     <link rel="stylesheet" href="./SCSS_CSS/index.css" class="" />
-    <link
+    <!-- <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-    />
+    /> -->
 
     <!-- BOOTSTRAP -->
     <!-- <link
@@ -36,17 +36,13 @@
     />
     <link rel="icon" type="image/x-icon" href="./IMG/embe.png" />
     <!-- JavaScript -->
-    <!-- <script
-      type="text/javascript"
-      src="https://www.gstatic.com/charts/loader.js"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
-    <script src="./JS/main.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
     <title>To Do Web</title>
   </head>
   <body>
     <header>
-      <h1>My List</h1>
+      <h1 class="title">My List</h1>
       <!-- <p id="currentTime"></p> -->
     </header>
     <form action="">
@@ -61,29 +57,22 @@
       </div>
       <input type="text" class="todo-input" />
       <button class="todo-button" type="submit">+</button>
-
-      <!-- <div class="select">
-        <label for="filter-type">Loại:</label>
-        <select id="filter-type" class="filter-type">
-          <option value="all">Tất cả</option>
-          <option value="personal">Cá nhân</option>
-          <option value="work">Công việc</option>
-          <option value="shopping">Quan trọng</option>
-        </select>
-      </div> -->
     </form>
 
     <div class="todo-container">
+      <div class="status-buttons">
+        <button class="white-btn"></button>
+        <button class="green-btn" style="background-color: lightgreen"></button>
+        <button class="blue-btn" style="background-color: lightblue"></button>
+        <button
+          class="yellow-btn"
+          style="background-color: lightyellow"
+        ></button>
+      </div>
       <ul class="todo-list" id="currentTime">
-        <div class="status-buttons">
-          <button class="green-btn" style="background-color: green">O</button>
-          <button class="blue-btn" style="background-color: blue">O</button>
-          <button class="yellow-btn" style="background-color: yellow">O</button>
-        </div>
-
         <!-- <p id="currentTime"></p> -->
       </ul>
     </div>
-    <script src="./JS/main.js"></script>
+    <script src="./JS/hi.js"></script>
   </body>
 </html>

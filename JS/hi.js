@@ -181,7 +181,7 @@ function getLocalTodos() {
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
-    todoDiv.classList.add(todo.color); // Khôi phục màu từ localStorage
+    // todoDiv.classList.add(todo.color); // Khôi phục màu từ localStorage
 
     const newTodo = document.createElement("li");
     newTodo.innerText = todo.text; // Nội dung công việc
@@ -351,7 +351,7 @@ function addTodoItem(text, color) {
   // Thêm to-do vào danh sách
   document.querySelector(".todo-list").appendChild(todoItem);
 }
-addTodoItem("Task 1 - ALL - white", "lightgreen");
+addTodoItem("Task 1 - ALL - white", "white");
 addTodoItem("Task 2 - deadline dài - green", "lightgreen");
 addTodoItem("Task 3 - deadline ngắn - blue", "lightblue");
 addTodoItem("Task 4 - Quan trọng - yellow", "lightyellow");
@@ -371,3 +371,38 @@ document
 window.addEventListener("DOMContentLoaded", (event) => {
   filterByColor("all");
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  const sortable = new Sortable(todoList, {
+    animation: 150, // Hiệu ứng khi kéo thả
+    ghostClass: "sortable-ghost", // Lớp CSS cho mục đang được kéo
+    onEnd: function (evt) {
+      console.log("Dragged and dropped!"); // Thêm dòng này để kiểm tra xem Sortable có hoạt động không
+      updateTodoOrder(); // Cập nhật thứ tự sau khi kéo thả
+    },
+  });
+  console.log("Sortable.js initialized"); // Thêm dòng này để kiểm tra quá trình khởi tạo
+});
+
+function updateTodoOrder() {
+  let todos = [];
+  const todoItems = document.querySelectorAll(".todo");
+
+  todoItems.forEach((todoItem) => {
+    const text = todoItem.querySelector(".todo-item").innerText;
+    const color = todoItem.style.backgroundColor || ""; // Lấy màu sắc
+    const time = todoItem
+      .querySelector("span")
+      .innerText.replace(" (Created at: ", "")
+      .replace(")", ""); // Lấy thời gian
+
+    todos.push({
+      text: text,
+      time: time,
+      color: color,
+    });
+  });
+
+  // Lưu lại thứ tự mới vào localStorage
+  localStorage.setItem("todos", JSON.stringify(todos));
+}

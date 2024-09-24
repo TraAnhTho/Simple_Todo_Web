@@ -14,7 +14,10 @@ body {
 }
 
 header {
-  font-size: 1.5rem;
+  font-size: 1rem;
+}
+h1.title {
+  font-size: 100px;
 }
 
 header,
@@ -157,4 +160,10 @@ select {
 .select::hover::after {
   background: white;
   color: $color_other;
+}
+
+.todo-list {
+  cursor: move; /* Để biểu thị phần tử có thể kéo */
+  display: block;
+  align-items: center;
 }
