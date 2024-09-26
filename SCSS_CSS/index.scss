@@ -60,6 +60,7 @@ form button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .todo-list {
@@ -163,7 +164,11 @@ select {
 }
 
 .todo-list {
-  cursor: move; /* Để biểu thị phần tử có thể kéo */
   display: block;
   align-items: center;
+}
+div.todo:hover {
+  background-color: $color_other;
+  color: orange;
+  cursor: move;
 }

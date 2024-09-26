@@ -8,12 +8,16 @@ todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("change", filterTodo);
 
+let currentElement = "";
+let initialX = 0,
+  initialY = 0;
+let todoCount = 0; // Biến đếm để đánh số cho từng to-do
+
 function addTodo(event) {
   event.preventDefault();
   const todoDiv = document.createElement("div");
   console.log(todoDiv);
   todoDiv.classList.add("todo");
-
   const newTodo = document.createElement("li");
   newTodo.innerText = todoInput.value;
   console.log(todoInput.value);
@@ -21,9 +25,18 @@ function addTodo(event) {
 
   if (todoInput.value != "") {
     console.log("chay if");
-
     newTodo.classList.add("todo-item");
+    todoCount++; // Tăng số thứ tự to-do mỗi khi thêm
+
     todoDiv.appendChild(newTodo);
+
+    // Thêm các thuộc tính kéo thả
+    todoDiv.draggable = true;
+    todoDiv.addEventListener("dragstart", dragStart, false);
+    todoDiv.addEventListener("dragover", dragOver, false);
+    todoDiv.addEventListener("drop", drop, false);
+    todoDiv.addEventListener("touchstart", dragStart, false);
+    todoDiv.addEventListener("touchmove", drop, false);
 
     // Lấy ngày tháng năm và giờ phút giây hiện tại
     const now = new Date();
@@ -136,6 +149,8 @@ function deleteCheck(e) {
   const item = e.target;
 
   if (item.classList[0] === "trash-btn") {
+    todoCount--; // Tăng số thứ tự to-do mỗi khi thêm
+
     const todo = item.parentElement;
     todo.classList.add("slide");
 
@@ -181,6 +196,14 @@ function getLocalTodos() {
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
+    todoDiv.draggable = true; // Add draggable functionality
+
+    todoDiv.draggable = true; // Thêm thuộc tính draggable
+    todoDiv.addEventListener("dragstart", dragStart, false);
+    todoDiv.addEventListener("dragover", dragOver, false);
+    todoDiv.addEventListener("drop", drop, false);
+    todoDiv.addEventListener("touchstart", dragStart, false);
+    todoDiv.addEventListener("touchmove", drop, false);
     // todoDiv.classList.add(todo.color); // Khôi phục màu từ localStorage
 
     const newTodo = document.createElement("li");
@@ -206,21 +229,18 @@ function getLocalTodos() {
     greenButton.classList.add("green-btn");
     greenButton.innerHTML = "O";
     greenButton.style.backgroundColor = "lightgreen"; // Gắn màu cho nút
-
     statusDiv.appendChild(greenButton);
 
     const blueButton = document.createElement("button");
     blueButton.classList.add("blue-btn");
     blueButton.innerHTML = "O";
     blueButton.style.backgroundColor = "lightblue"; // Gắn màu cho nút
-
     statusDiv.appendChild(blueButton);
 
     const yellowButton = document.createElement("button");
     yellowButton.classList.add("yellow-btn");
     yellowButton.innerHTML = "O";
     yellowButton.style.backgroundColor = "lightyellow"; // Gắn màu cho nút
-
     statusDiv.appendChild(yellowButton);
 
     todoDiv.appendChild(statusDiv); // Thêm div trạng thái vào to-do item
@@ -296,22 +316,6 @@ function filterTodo(e) {
     }
   });
 }
-function updateLocalTodoColor(todoText, color) {
-  let todos;
-  if (localStorage.getItem("todos") === null) {
-    todos = [];
-  } else {
-    todos = JSON.parse(localStorage.getItem("todos"));
-  }
-
-  todos.forEach((todo) => {
-    if (todo.text === todoText) {
-      todo.color = color; // Cập nhật màu mới
-    }
-  });
-
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
 
 function filterByColor(color) {
   const todos = document.querySelectorAll(".todo"); // Lấy tất cả các to-do từ danh sách
@@ -341,6 +345,24 @@ document
 document
   .querySelector(".white-btn")
   .addEventListener("click", () => filterByColor("all")); // Hiển thị tất cả các to-do
+
+function updateLocalTodoColor(todoText, color) {
+  let todos =
+    // if (localStorage.getItem("todos") === null) {
+    //   todos = [];
+    // } else {
+    //   todos =
+    JSON.parse(localStorage.getItem("todos")) || [];
+  // }
+
+  todos.forEach((todo) => {
+    if (todo.text === todoText) {
+      todo.color = color; // Cập nhật màu mới
+    }
+  });
+
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
 
 // Hàm tạo và thêm to-do mới với màu sắc
 function addTodoItem(text, color) {
@@ -372,37 +394,43 @@ window.addEventListener("DOMContentLoaded", (event) => {
   filterByColor("all");
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const sortable = new Sortable(todoList, {
-    animation: 150, // Hiệu ứng khi kéo thả
-    ghostClass: "sortable-ghost", // Lớp CSS cho mục đang được kéo
-    onEnd: function (evt) {
-      console.log("Dragged and dropped!"); // Thêm dòng này để kiểm tra xem Sortable có hoạt động không
-      updateTodoOrder(); // Cập nhật thứ tự sau khi kéo thả
-    },
-  });
-  console.log("Sortable.js initialized"); // Thêm dòng này để kiểm tra quá trình khởi tạo
-});
+const isTouchDevice = () => {
+  try {
+    document.createEvent("TouchEvent");
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
-function updateTodoOrder() {
-  let todos = [];
-  const todoItems = document.querySelectorAll(".todo");
-
-  todoItems.forEach((todoItem) => {
-    const text = todoItem.querySelector(".todo-item").innerText;
-    const color = todoItem.style.backgroundColor || ""; // Lấy màu sắc
-    const time = todoItem
-      .querySelector("span")
-      .innerText.replace(" (Created at: ", "")
-      .replace(")", ""); // Lấy thời gian
-
-    todos.push({
-      text: text,
-      time: time,
-      color: color,
-    });
-  });
-
-  // Lưu lại thứ tự mới vào localStorage
-  localStorage.setItem("todos", JSON.stringify(todos));
+function dragStart(e) {
+  initialX = isTouchDevice() ? e.touches[0].clientX : e.clientX;
+  initialY = isTouchDevice() ? e.touches[0].clientY : e.clientY;
+  currentElement = e.target;
 }
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+const drop = (e) => {
+  e.preventDefault();
+  let newX = isTouchDevice() ? e.touches[0].clientX : e.clientX;
+  let newY = isTouchDevice() ? e.touches[0].clientY : e.clientY;
+
+  let targetElement = document.elementFromPoint(newX, newY);
+
+  if (targetElement && targetElement.classList.contains("todo")) {
+    let currentPosition = Array.from(todoList.children).indexOf(currentElement);
+    let targetPosition = Array.from(todoList.children).indexOf(targetElement);
+
+    if (currentPosition < targetPosition) {
+      targetElement.insertAdjacentElement("afterend", currentElement);
+    } else {
+      targetElement.insertAdjacentElement("beforebegin", currentElement);
+    }
+  }
+
+  initialX = newX;
+  initialY = newY;
+};

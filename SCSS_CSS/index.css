@@ -1,4 +1,9 @@
 @charset "UTF-8";
+.wapper {
+  display: flex;
+  flex-direction: row;
+}
+
 .status-buttons {
   display: flex;
   justify-content: space-around;
@@ -98,6 +103,7 @@ form button:hover {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 .todo-list {
@@ -200,7 +206,12 @@ select {
 }
 
 .todo-list {
-  cursor: move; /* Để biểu thị phần tử có thể kéo */
   display: block;
   align-items: center;
+}
+
+div.todo:hover {
+  background-color: rgb(219, 112, 147);
+  color: orange;
+  cursor: move;
 }/*# sourceMappingURL=index.css.map */

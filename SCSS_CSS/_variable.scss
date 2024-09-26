@@ -9,6 +9,10 @@ $color_opacity: linear-gradient(
 $color_passion: linear-gradient(90deg, #feadb9, #487ba6);
 $color-gray-200: #e1e8ed93;
 
+.wapper {
+  display: flex;
+  flex-direction: row;
+}
 .status-buttons {
   display: flex;
   justify-content: space-around;
@@ -45,5 +49,3 @@ $color-gray-200: #e1e8ed93;
   background-color: #f0f0f0;
   cursor: pointer;
 }
-
-

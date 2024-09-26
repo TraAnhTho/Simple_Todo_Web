@@ -28,7 +28,8 @@ function addTodo(event) {
     // Lấy ngày tháng năm và giờ phút giây hiện tại
     const now = new Date();
     const day = now.getDate();
-    const month = now.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0 nên cần +1
+    const month = now.getMonth() + 1;
+    // Tháng trong JavaScript bắt đầu từ 0 nên cần +1
     const year = now.getFullYear();
     const hours = now.getHours();
     const minutes = now.getMinutes();
@@ -126,11 +127,23 @@ function addTodo(event) {
     todoList.appendChild(todoDiv);
     todoInput.value = "";
     saveLocalTodos({ text: todoInput.value, color: selectedColor });
+
+    // // Add hover effect using JavaScript
+    // todoDiv.addEventListener("mouseover", () => {
+    //   todoDiv.style.backgroundColor = "gray"; // Change background when hovered
+    // });
+
+    // todoDiv.addEventListener("mouseout", () => {
+    //   todoDiv.style.backgroundColor = ""; // Reset background when not hovered
+    // });
   } else if (todoInput.value == "") {
     alert("mời nhạpa thông tin");
     console.log("chay else");
   }
 }
+// todoDiv.addEventListener("mouseover", () => {
+//   todoDiv.style.backgroundColor = "gray";
+// });
 
 function deleteCheck(e) {
   const item = e.target;
@@ -163,7 +176,8 @@ function saveLocalTodos(todo) {
   todos.push({
     text: todo.text,
     time: todo.time,
-    color: todo.color || "", // Lưu màu nếu có, nếu chưa chọn thì để trống
+    color: todo.color || "",
+    // Lưu màu nếu có, nếu chưa chọn thì để trống
   });
   // todos.push(todo); // Lưu cả text và color
 
@@ -315,7 +329,6 @@ function updateLocalTodoColor(todoText, color) {
 
 function filterByColor(color) {
   const todos = document.querySelectorAll(".todo"); // Lấy tất cả các to-do từ danh sách
-
   todos.forEach(function (todo) {
     const todoColor = todo.style.backgroundColor; // Lấy màu nền của to-do
     if (color === "all") {
@@ -371,3 +384,18 @@ document
 window.addEventListener("DOMContentLoaded", (event) => {
   filterByColor("all");
 });
+
+// // Function to inject CSS for hover effect
+// function injectHoverStyles() {
+//   const style = document.createElement("style");
+//   style.innerHTML = `
+//     .todo-item:hover {
+//       color: orange;  /* Changes text color on hover */
+//       background-color: lightgray; /* Optional: changes background on hover */
+//     }
+//   `;
+//   document.head.appendChild(style);
+// }
+
+// // Inject hover styles on page load
+// injectHoverStyles();
