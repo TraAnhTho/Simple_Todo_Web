@@ -8,12 +8,16 @@ todoButton.addEventListener("click", addTodo);
 todoList.addEventListener("click", deleteCheck);
 filterOption.addEventListener("change", filterTodo);
 
+let currentElement = "";
+let initialX = 0,
+  initialY = 0;
+let todoCount = 0; // Biến đếm để đánh số cho từng to-do
+
 function addTodo(event) {
   event.preventDefault();
   const todoDiv = document.createElement("div");
   console.log(todoDiv);
   todoDiv.classList.add("todo");
-
   const newTodo = document.createElement("li");
   newTodo.innerText = todoInput.value;
   console.log(todoInput.value);
@@ -21,15 +25,23 @@ function addTodo(event) {
 
   if (todoInput.value != "") {
     console.log("chay if");
-
     newTodo.classList.add("todo-item");
+    todoCount++; // Tăng số thứ tự to-do mỗi khi thêm
+
     todoDiv.appendChild(newTodo);
+
+    // Thêm các thuộc tính kéo thả
+    todoDiv.draggable = true;
+    todoDiv.addEventListener("dragstart", dragStart, false);
+    todoDiv.addEventListener("dragover", dragOver, false);
+    todoDiv.addEventListener("drop", drop, false);
+    todoDiv.addEventListener("touchstart", dragStart, false);
+    todoDiv.addEventListener("touchmove", drop, false);
 
     // Lấy ngày tháng năm và giờ phút giây hiện tại
     const now = new Date();
     const day = now.getDate();
-    const month = now.getMonth() + 1;
-    // Tháng trong JavaScript bắt đầu từ 0 nên cần +1
+    const month = now.getMonth() + 1; // Tháng trong JavaScript bắt đầu từ 0 nên cần +1
     const year = now.getFullYear();
     const hours = now.getHours();
     const minutes = now.getMinutes();
@@ -56,7 +68,9 @@ function addTodo(event) {
 
     // Tạo phần tử hiển thị thời gian và ngày tháng
     const timeSpan = document.createElement("span");
-    timeSpan.innerText = " (Created at: " + formattedTime + ")";
+    timeSpan.style.fontSize = "15px";
+    timeSpan.style.color = "gray";
+    timeSpan.innerText = " (Cre at: " + formattedTime + ")";
     todoDiv.appendChild(timeSpan);
 
     // Lưu cả nội dung và thời gian vào localStorage
@@ -127,28 +141,18 @@ function addTodo(event) {
     todoList.appendChild(todoDiv);
     todoInput.value = "";
     saveLocalTodos({ text: todoInput.value, color: selectedColor });
-
-    // // Add hover effect using JavaScript
-    // todoDiv.addEventListener("mouseover", () => {
-    //   todoDiv.style.backgroundColor = "gray"; // Change background when hovered
-    // });
-
-    // todoDiv.addEventListener("mouseout", () => {
-    //   todoDiv.style.backgroundColor = ""; // Reset background when not hovered
-    // });
   } else if (todoInput.value == "") {
     alert("mời nhạpa thông tin");
     console.log("chay else");
   }
 }
-// todoDiv.addEventListener("mouseover", () => {
-//   todoDiv.style.backgroundColor = "gray";
-// });
 
 function deleteCheck(e) {
   const item = e.target;
 
   if (item.classList[0] === "trash-btn") {
+    todoCount--; // Tăng số thứ tự to-do mỗi khi thêm
+
     const todo = item.parentElement;
     todo.classList.add("slide");
 
@@ -176,8 +180,7 @@ function saveLocalTodos(todo) {
   todos.push({
     text: todo.text,
     time: todo.time,
-    color: todo.color || "",
-    // Lưu màu nếu có, nếu chưa chọn thì để trống
+    color: todo.color || "", // Lưu màu nếu có, nếu chưa chọn thì để trống
   });
   // todos.push(todo); // Lưu cả text và color
 
@@ -195,7 +198,15 @@ function getLocalTodos() {
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo");
-    todoDiv.classList.add(todo.color); // Khôi phục màu từ localStorage
+    todoDiv.draggable = true; // Add draggable functionality
+
+    todoDiv.draggable = true; // Thêm thuộc tính draggable
+    todoDiv.addEventListener("dragstart", dragStart, false);
+    todoDiv.addEventListener("dragover", dragOver, false);
+    todoDiv.addEventListener("drop", drop, false);
+    todoDiv.addEventListener("touchstart", dragStart, false);
+    todoDiv.addEventListener("touchmove", drop, false);
+    // todoDiv.classList.add(todo.color); // Khôi phục màu từ localStorage
 
     const newTodo = document.createElement("li");
     newTodo.innerText = todo.text; // Nội dung công việc
@@ -204,7 +215,10 @@ function getLocalTodos() {
 
     // Hiển thị thời gian tạo to-do
     const timeSpan = document.createElement("span");
-    timeSpan.innerText = " (Created at: " + todo.time + ")";
+    timeSpan.style.fontSize = "15px";
+    timeSpan.style.color = "gray";
+
+    timeSpan.innerText = " (Cre at: " + todo.time + ")";
     todoDiv.appendChild(timeSpan);
 
     // Khôi phục màu sắc
@@ -220,21 +234,18 @@ function getLocalTodos() {
     greenButton.classList.add("green-btn");
     greenButton.innerHTML = "O";
     greenButton.style.backgroundColor = "lightgreen"; // Gắn màu cho nút
-
     statusDiv.appendChild(greenButton);
 
     const blueButton = document.createElement("button");
     blueButton.classList.add("blue-btn");
     blueButton.innerHTML = "O";
     blueButton.style.backgroundColor = "lightblue"; // Gắn màu cho nút
-
     statusDiv.appendChild(blueButton);
 
     const yellowButton = document.createElement("button");
     yellowButton.classList.add("yellow-btn");
     yellowButton.innerHTML = "O";
     yellowButton.style.backgroundColor = "lightyellow"; // Gắn màu cho nút
-
     statusDiv.appendChild(yellowButton);
 
     todoDiv.appendChild(statusDiv); // Thêm div trạng thái vào to-do item
@@ -310,25 +321,10 @@ function filterTodo(e) {
     }
   });
 }
-function updateLocalTodoColor(todoText, color) {
-  let todos;
-  if (localStorage.getItem("todos") === null) {
-    todos = [];
-  } else {
-    todos = JSON.parse(localStorage.getItem("todos"));
-  }
-
-  todos.forEach((todo) => {
-    if (todo.text === todoText) {
-      todo.color = color; // Cập nhật màu mới
-    }
-  });
-
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
 
 function filterByColor(color) {
   const todos = document.querySelectorAll(".todo"); // Lấy tất cả các to-do từ danh sách
+
   todos.forEach(function (todo) {
     const todoColor = todo.style.backgroundColor; // Lấy màu nền của to-do
     if (color === "all") {
@@ -355,6 +351,24 @@ document
   .querySelector(".white-btn")
   .addEventListener("click", () => filterByColor("all")); // Hiển thị tất cả các to-do
 
+function updateLocalTodoColor(todoText, color) {
+  let todos =
+    // if (localStorage.getItem("todos") === null) {
+    //   todos = [];
+    // } else {
+    //   todos =
+    JSON.parse(localStorage.getItem("todos")) || [];
+  // }
+
+  todos.forEach((todo) => {
+    if (todo.text === todoText) {
+      todo.color = color; // Cập nhật màu mới
+    }
+  });
+
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
 // Hàm tạo và thêm to-do mới với màu sắc
 function addTodoItem(text, color) {
   const todoItem = document.createElement("li"); // Tạo thẻ <li> mới
@@ -364,7 +378,7 @@ function addTodoItem(text, color) {
   // Thêm to-do vào danh sách
   document.querySelector(".todo-list").appendChild(todoItem);
 }
-addTodoItem("Task 1 - ALL - white", "lightgreen");
+addTodoItem("Task 1 - ALL - white", "white");
 addTodoItem("Task 2 - deadline dài - green", "lightgreen");
 addTodoItem("Task 3 - deadline ngắn - blue", "lightblue");
 addTodoItem("Task 4 - Quan trọng - yellow", "lightyellow");
@@ -385,17 +399,43 @@ window.addEventListener("DOMContentLoaded", (event) => {
   filterByColor("all");
 });
 
-// // Function to inject CSS for hover effect
-// function injectHoverStyles() {
-//   const style = document.createElement("style");
-//   style.innerHTML = `
-//     .todo-item:hover {
-//       color: orange;  /* Changes text color on hover */
-//       background-color: lightgray; /* Optional: changes background on hover */
-//     }
-//   `;
-//   document.head.appendChild(style);
-// }
+const isTouchDevice = () => {
+  try {
+    document.createEvent("TouchEvent");
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
 
-// // Inject hover styles on page load
-// injectHoverStyles();
+function dragStart(e) {
+  initialX = isTouchDevice() ? e.touches[0].clientX : e.clientX;
+  initialY = isTouchDevice() ? e.touches[0].clientY : e.clientY;
+  currentElement = e.target;
+}
+
+function dragOver(e) {
+  e.preventDefault();
+}
+
+const drop = (e) => {
+  e.preventDefault();
+  let newX = isTouchDevice() ? e.touches[0].clientX : e.clientX;
+  let newY = isTouchDevice() ? e.touches[0].clientY : e.clientY;
+
+  let targetElement = document.elementFromPoint(newX, newY);
+
+  if (targetElement && targetElement.classList.contains("todo")) {
+    let currentPosition = Array.from(todoList.children).indexOf(currentElement);
+    let targetPosition = Array.from(todoList.children).indexOf(targetElement);
+
+    if (currentPosition < targetPosition) {
+      targetElement.insertAdjacentElement("afterend", currentElement);
+    } else {
+      targetElement.insertAdjacentElement("beforebegin", currentElement);
+    }
+  }
+
+  initialX = newX;
+  initialY = newY;
+};
