@@ -49,7 +49,7 @@
 }
 
 body {
-  background-color: rgb(255, 182, 193);
+  background-color: rgb(153, 184, 152);
   color: white;
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
@@ -71,6 +71,28 @@ form {
   align-items: center;
 }
 
+.wapper {
+  display: flex;
+  flex-direction: row;
+  margin: 2.5rem;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 30%;
+  border-right: 2 solid black;
+}
+
+.sidebar-part2 {
+  display: flex;
+  flex-direction: row;
+}
+
+.main {
+  flex: 70%;
+}
+
 form input,
 form button {
   padding: 0.5rem;
@@ -82,21 +104,23 @@ form button {
 }
 
 form button {
-  color: rgb(219, 112, 147);
+  color: rgb(150, 187, 124);
   background: white;
   cursor: pointer;
   transition: all 0.3 ease;
-  margin-left: 0.5rem;
 }
 
 form button:hover {
   color: white;
-  background: rgb(219, 112, 147);
+  background: rgb(150, 187, 124);
 }
 
-.fa-plus-circle {
-  margin-top: 0.3rem;
-  margin-left: -8px;
+.todo-button {
+  margin: 0 auto;
+}
+
+.fa-solid {
+  margin-left: -0.4rem;
 }
 
 .todo-container {
@@ -138,7 +162,7 @@ form button:hover {
 }
 
 .complete-btn {
-  background: rgb(219, 112, 147);
+  background: rgb(150, 187, 124);
 }
 
 .trash-btn {
@@ -182,7 +206,7 @@ select {
 }
 
 select {
-  color: rgb(219, 112, 147);
+  color: rgb(150, 187, 124);
   width: 10rem;
   height: 3.2rem;
   cursor: pointer;
@@ -192,7 +216,7 @@ select {
 .select::after {
   content: "▼";
   position: absolute;
-  background: rgb(219, 112, 147);
+  background: rgb(150, 187, 124);
   top: 0;
   right: 0;
   padding: 1rem;
@@ -202,7 +226,7 @@ select {
 
 .select::hover::after {
   background: white;
-  color: rgb(219, 112, 147);
+  color: rgb(150, 187, 124);
 }
 
 .todo-list {
@@ -211,7 +235,7 @@ select {
 }
 
 div.todo:hover {
-  background-color: rgb(219, 112, 147);
+  background-color: rgb(150, 187, 124);
   color: orange;
   cursor: move;
 }/*# sourceMappingURL=index.css.map */

@@ -5,10 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Google Fonts -->
-    <!-- <link
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    /> -->
+    />
     <!-- <link
       rel="stylesheet"
       href="path/to/font-awesome/css/font-awesome.min.css"
@@ -41,38 +41,62 @@
     <title>To Do Web</title>
   </head>
   <body>
-    <header>
-      <h1 class="title">My List</h1>
-      <!-- <p id="currentTime"></p> -->
-    </header>
-    <form action="">
-      <div class="select">
-        <label for="filter-type">State:</label>
+    <div class="wapper">
+      <!-- ------------------------------------------------------------ -->
 
-        <select name="todos" class="filter-todo">
-          <option value="all">Tất Cả</option>
-          <option value="completed">Hoàn Thành</option>
-          <option value="incomplete">Thực Hiện</option>
-        </select>
-      </div>
-      <input type="text" class="todo-input" />
-      <button class="todo-button" type="submit">+</button>
-    </form>
+      <div class="sidebar">
+        <h1 class="title">My List</h1>
 
-    <div class="todo-container">
-      <div class="status-buttons">
-        <button class="white-btn"></button>
-        <button class="green-btn" style="background-color: lightgreen"></button>
-        <button class="blue-btn" style="background-color: lightblue"></button>
-        <button
-          class="yellow-btn"
-          style="background-color: lightyellow"
-        ></button>
+        <form action="">
+          <input type="text" class="todo-input" />
+          <button class="todo-button" type="submit">
+            <i class="fa-solid fa-circle-plus"></i>
+          </button>
+        </form>
+        <!-- ------------------------------------------------------------ -->
+
+        <div class="sidebar-part2">
+          <div class="select">
+            <label for="filter-type">State:</label>
+
+            <select name="todos" class="filter-todo">
+              <option value="all">Tất Cả</option>
+              <option value="completed">Hoàn Thành</option>
+              <option value="incomplete">Thực Hiện</option>
+            </select>
+          </div>
+          <!-- ------------------------------------------------------------ -->
+          <div class="todo-container">
+            <div class="status-buttons">
+              <button class="white-btn"></button>
+              <button
+                class="green-btn"
+                style="background-color: lightgreen"
+              ></button>
+              <button
+                class="blue-btn"
+                style="background-color: lightblue"
+              ></button>
+              <button
+                class="yellow-btn"
+                style="background-color: lightyellow"
+              ></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ------------------------------------------------------------ -->
       </div>
-      <ul class="todo-list" id="currentTime">
-        <!-- <p id="currentTime"></p> -->
-      </ul>
+      <!-- ------------------------------------------------------------ -->
+
+      <div class="main">
+        <ul class="todo-list" id="currentTime">
+          <!-- <p id="currentTime"></p> -->
+        </ul>
+      </div>
+      <!-- ------------------------------------------------------------ -->
     </div>
+
     <script src="./JS/main.js"></script>
   </body>
 </html>

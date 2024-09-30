@@ -129,12 +129,12 @@ function addTodo(event) {
     //ADDING TO LOCAL STORAGE
     // saveLocalTodos(todoInput.value);
     const completedButton = document.createElement("button");
-    completedButton.innerHTML = "ok";
+    completedButton.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
 
     const trashButton = document.createElement("button");
-    trashButton.innerHTML = "X";
+    trashButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     trashButton.classList.add("trash-btn");
     todoDiv.appendChild(trashButton);
 
@@ -269,12 +269,12 @@ function getLocalTodos() {
     });
 
     const completedButton = document.createElement("button");
-    completedButton.innerHTML = "ok";
+    completedButton.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
 
     const trashButton = document.createElement("button");
-    trashButton.innerHTML = "X";
+    trashButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     trashButton.classList.add("trash-btn");
     todoDiv.appendChild(trashButton);
 

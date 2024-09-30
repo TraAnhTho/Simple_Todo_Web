@@ -27,6 +27,24 @@ form {
   justify-content: center;
   align-items: center;
 }
+.wapper {
+  display: flex;
+  flex-direction: row;
+  margin: 2.5rem;
+}
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 30%;
+  border-right: 2 solid black;
+}
+.sidebar-part2 {
+  display: flex;
+  flex-direction: row;
+}
+.main {
+  flex: 70%;
+}
 
 form input,
 form button {
@@ -43,17 +61,21 @@ form button {
   background: white;
   cursor: pointer;
   transition: all 0.3 ease;
-  margin-left: 0.5rem;
 }
 
 form button:hover {
   color: white;
   background: $color_other;
 }
-
+.todo-button {
+  margin: 0 auto;
+}
+.fa-solid {
+  margin-left: -0.4rem;
+}
 .fa-plus-circle {
-  margin-top: 0.3rem;
-  margin-left: -8px;
+  // margin-top: 0.3rem;
+  // margin-left: -8px;
 }
 
 .todo-container {
