@@ -36,7 +36,8 @@ form {
   display: flex;
   flex-direction: column;
   flex: 30%;
-  border-right: 2 solid black;
+  border-right: 2px solid $color-gray-200;
+  box-shadow: rgba(0, 0, 0, 0.1) 0.5rem 1.2rem 0px;
 }
 .sidebar-part2 {
   display: flex;
@@ -118,12 +119,15 @@ form button:hover {
 
 .complete-btn {
   background: $color_other;
+  width: 3.5rem;
 }
 
 .trash-btn {
   border-top-right-radius: 1.75rem;
   border-bottom-right-radius: 1.75rem;
   background: rgb(171, 171, 171);
+  width: 3.5rem;
+
 }
 
 .todo-item {
@@ -191,6 +195,6 @@ select {
 }
 div.todo:hover {
   background-color: $color_other;
-  color: orange;
+  color: $color_passion;
   cursor: move;
 }

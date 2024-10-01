@@ -74,7 +74,11 @@ function addTodo(event) {
     todoDiv.appendChild(timeSpan);
 
     // Lưu cả nội dung và thời gian vào localStorage
-    saveLocalTodos({ text: todoInput.value, time: formattedTime });
+    saveLocalTodos({
+      text: todoInput.value,
+      time: formattedTime,
+      color: selectedColor,
+    });
 
     // Lấy màu đã chọn
     const selectedColor = "white"; // Hoặc lấy màu mặc định nếu không chọn
@@ -151,6 +155,8 @@ function deleteCheck(e) {
   const item = e.target;
 
   if (item.classList[0] === "trash-btn") {
+    todoCount--; // Tăng số thứ tự to-do mỗi khi thêm
+
     const todo = item.parentElement;
     todo.classList.add("slide");
 
@@ -163,8 +169,8 @@ function deleteCheck(e) {
   if (item.classList[0] === "complete-btn") {
     const todo = item.parentElement;
     todo.classList.toggle("completed");
-    const todoText = todo.children[0].innerText; // Lấy nội dung công việc
-    updateLocalTodoCompletion(todoText, todo.classList.contains("completed"));
+    const completed = todo.classList.contains("completed");
+    updateLocalTodoCompletion(todo.children[0].innerText, completed);
   }
 }
 
@@ -181,7 +187,7 @@ function saveLocalTodos(todo) {
     text: todo.text,
     time: todo.time,
     color: todo.color || "", // Lưu màu nếu có, nếu chưa chọn thì để trống
-    completed: todo.completed || false, // Trạng thái hoàn thành
+    completed: todo.completed || false, // Lưu trạng thái hoàn thành nếu có
   });
   // todos.push(todo); // Lưu cả text và color
 
@@ -229,6 +235,8 @@ function getLocalTodos() {
     // Khôi phục trạng thái hoàn thành
     if (todo.completed) {
       todoDiv.classList.add("completed");
+    } else if (todo.trash) {
+      todoDiv.classList.add("trash");
     }
 
     // Tạo lại các nút trạng thái
@@ -288,17 +296,25 @@ function getLocalTodos() {
 }
 
 function removeLocalTodos(todo) {
-  let todos;
-  if (localStorage.getItem("todos") === null) {
-    todos = [];
-  } else {
-    todos = JSON.parse(localStorage.getItem("todos"));
-  }
+  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  const todoText = todo.children[0].innerText;
 
-  const todoIndex = todo.children[0].innerText;
-  todos.splice(todos.indexOf(todoIndex), 1);
+  todos = todos.filter((t) => t.text !== todoText);
   localStorage.setItem("todos", JSON.stringify(todos));
 }
+
+// function removeLocalTodos(todo) {
+//   let todos;
+//   if (localStorage.getItem("todos") === null) {
+//     todos = [];
+//   } else {
+//     todos = JSON.parse(localStorage.getItem("todos"));
+//   }
+
+//   const todoIndex = todo.children[0].innerText;
+//   todos.splice(todos.indexOf(todoIndex), 1);
+//   localStorage.setItem("todos", JSON.stringify(todos));
+// }
 
 function filterTodo(e) {
   const todos = todoList.children;
