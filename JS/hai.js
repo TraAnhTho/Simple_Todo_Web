@@ -169,47 +169,32 @@ function deleteCheck(e) {
 }
 
 function saveLocalTodos(todo) {
-  let todos = JSON.parse(localStorage.getItem("todos")) || [];
-
-  // Tìm xem to-do này đã có trong danh sách chưa (dựa trên text)
-  const existingTodoIndex = todos.findIndex(
-    (storedTodo) => storedTodo.text === todo.text
-  );
-
-  if (existingTodoIndex > -1) {
-    // Cập nhật to-do đã tồn tại
-    todos[existingTodoIndex] = {
-      text: todo.text,
-      time: todo.time,
-      color: todo.color || "",
-      completed: todo.completed || false,
-      index: todo.index || todos.length, // Đặt thứ tự nếu không có
-    };
+  let todos;
+  if (localStorage.getItem("todos") === null) {
+    todos = [];
   } else {
-    // Thêm mới to-do
-    todos.push({
-      text: todo.text,
-      time: todo.time,
-      color: todo.color || "",
-      completed: todo.completed || false,
-      index: todo.index || todos.length,
-    });
+    todos = JSON.parse(localStorage.getItem("todos"));
   }
+
+  // Lưu thông tin của todo bao gồm cả trạng thái màu
+  todos.push({
+    text: todo.text,
+    time: todo.time,
+    color: todo.color || "", // Lưu màu nếu có, nếu chưa chọn thì để trống
+    completed: todo.completed || false, // Trạng thái hoàn thành
+  });
+  // todos.push(todo); // Lưu cả text và color
 
   localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 function getLocalTodos() {
-  let todos = JSON.parse(localStorage.getItem("todos")) || [];
-
-  // let todos;
-  // if (localStorage.getItem("todos") === null) {
-  //   todos = [];
-  // } else {
-  //   todos = JSON.parse(localStorage.getItem("todos"));
-  // }
-  // Sắp xếp lại todo theo thứ tự đã lưu
-  todos.sort((a, b) => a.index - b.index);
+  let todos;
+  if (localStorage.getItem("todos") === null) {
+    todos = [];
+  } else {
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
 
   todos.forEach(function (todo) {
     const todoDiv = document.createElement("div");
@@ -230,15 +215,12 @@ function getLocalTodos() {
     todoDiv.appendChild(newTodo);
 
     // Hiển thị thời gian tạo to-do
-    // Kiểm tra xem đã có span thời gian hay chưa
-    if (!todoDiv.querySelector(".created-time")) {
-      const timeSpan = document.createElement("span");
-      timeSpan.classList.add("created-time"); // Thêm class để nhận diện
-      timeSpan.style.fontSize = "15px";
-      timeSpan.style.color = "gray";
-      timeSpan.innerText = " (Cre at: " + todo.time + ")";
-      todoDiv.appendChild(timeSpan);
-    }
+    const timeSpan = document.createElement("span");
+    timeSpan.style.fontSize = "15px";
+    timeSpan.style.color = "gray";
+
+    timeSpan.innerText = " (Cre at: " + todo.time + ")";
+    todoDiv.appendChild(timeSpan);
 
     // Khôi phục màu sắc
     if (todo.color) {
@@ -250,7 +232,46 @@ function getLocalTodos() {
     }
 
     // Tạo lại các nút trạng thái
-    createStatusButtons(todoDiv, todo.text);
+    const statusDiv = document.createElement("div");
+    statusDiv.classList.add("status-buttons");
+
+    const greenButton = document.createElement("button");
+    greenButton.classList.add("green-btn");
+    greenButton.innerHTML = "O";
+    greenButton.style.backgroundColor = "lightgreen"; // Gắn màu cho nút
+    statusDiv.appendChild(greenButton);
+
+    const blueButton = document.createElement("button");
+    blueButton.classList.add("blue-btn");
+    blueButton.innerHTML = "O";
+    blueButton.style.backgroundColor = "lightblue"; // Gắn màu cho nút
+    statusDiv.appendChild(blueButton);
+
+    const yellowButton = document.createElement("button");
+    yellowButton.classList.add("yellow-btn");
+    yellowButton.innerHTML = "O";
+    yellowButton.style.backgroundColor = "lightyellow"; // Gắn màu cho nút
+    statusDiv.appendChild(yellowButton);
+
+    todoDiv.appendChild(statusDiv); // Thêm div trạng thái vào to-do item
+
+    greenButton.addEventListener("click", () => {
+      alert("Task marked as completed!");
+      todoDiv.style.backgroundColor = "lightgreen"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightgreen"); // Lưu màu vào localStorage
+    });
+
+    blueButton.addEventListener("click", () => {
+      alert("Blue button clicked!");
+      todoDiv.style.backgroundColor = "lightblue"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightblue"); // Lưu màu vào localStorage
+    });
+
+    yellowButton.addEventListener("click", () => {
+      alert("Yellow button clicked!");
+      todoDiv.style.backgroundColor = "lightyellow"; // Đổi màu của todo
+      updateLocalTodoColor(todo.text, "lightyellow"); // Lưu màu vào localStorage
+    });
 
     const completedButton = document.createElement("button");
     completedButton.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
@@ -265,52 +286,18 @@ function getLocalTodos() {
     todoList.appendChild(todoDiv);
   });
 }
-function createStatusButtons(todoDiv, todoText) {
-  const statusDiv = document.createElement("div");
-  statusDiv.classList.add("status-buttons");
-
-  const greenButton = document.createElement("button");
-  greenButton.classList.add("green-btn");
-  greenButton.innerHTML = "O";
-  greenButton.style.backgroundColor = "lightgreen";
-  greenButton.addEventListener("click", () => {
-    todoDiv.style.backgroundColor = "lightgreen";
-    updateLocalTodoColor(todoText, "lightgreen");
-  });
-
-  const blueButton = document.createElement("button");
-  blueButton.classList.add("blue-btn");
-  blueButton.innerHTML = "O";
-  blueButton.style.backgroundColor = "lightblue";
-  blueButton.addEventListener("click", () => {
-    todoDiv.style.backgroundColor = "lightblue";
-    updateLocalTodoColor(todoText, "lightblue");
-  });
-
-  const yellowButton = document.createElement("button");
-  yellowButton.classList.add("yellow-btn");
-  yellowButton.innerHTML = "O";
-  yellowButton.style.backgroundColor = "lightyellow";
-  yellowButton.addEventListener("click", () => {
-    todoDiv.style.backgroundColor = "lightyellow";
-    updateLocalTodoColor(todoText, "lightyellow");
-  });
-
-  statusDiv.appendChild(greenButton);
-  statusDiv.appendChild(blueButton);
-  statusDiv.appendChild(yellowButton);
-  todoDiv.appendChild(statusDiv);
-}
 
 function removeLocalTodos(todo) {
-  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+  let todos;
+  if (localStorage.getItem("todos") === null) {
+    todos = [];
+  } else {
+    todos = JSON.parse(localStorage.getItem("todos"));
+  }
 
   const todoIndex = todo.children[0].innerText;
-  const newTodos = todos.filter(function (storedTodo) {
-    return storedTodo.text !== todoIndex; // Lọc ra các to-do không trùng text
-  });
-
-  localStorage.setItem("todos", JSON.stringify(newTodos));
+  todos.splice(todos.indexOf(todoIndex), 1);
+  localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 function filterTodo(e) {
@@ -448,88 +435,6 @@ function dragOver(e) {
   e.preventDefault();
 }
 
-// Thêm sự kiện khi người dùng bắt đầu kéo
-todoList.addEventListener("dragstart", function (e) {
-  if (e.target.classList.contains("todo")) {
-    e.target.classList.add("dragging");
-  }
-});
-
-// Thêm sự kiện khi người dùng kết thúc kéo
-todoList.addEventListener("dragend", function (e) {
-  if (e.target.classList.contains("todo")) {
-    e.target.classList.remove("dragging");
-    updateLocalTodoOrder(); // Cập nhật lại thứ tự sau khi kéo
-  }
-});
-
-// Sự kiện kéo và thả
-todoList.addEventListener("dragover", function (e) {
-  e.preventDefault();
-  const afterElement = getDragAfterElement(todoList, e.clientY);
-  const draggable = document.querySelector(".dragging");
-  if (afterElement == null) {
-    todoList.appendChild(draggable);
-  } else {
-    todoList.insertBefore(draggable, afterElement);
-  }
-});
-
-// Hàm hỗ trợ kéo và thả (xác định vị trí giữa các to-do)
-function getDragAfterElement(container, y) {
-  const draggableElements = [
-    ...container.querySelectorAll(".todo:not(.dragging)"),
-  ];
-
-  return draggableElements.reduce(
-    (closest, child) => {
-      const box = child.getBoundingClientRect();
-      const offset = y - box.top - box.height / 2;
-      if (offset < 0 && offset > closest.offset) {
-        return { offset: offset, element: child };
-      } else {
-        return closest;
-      }
-    },
-    { offset: Number.NEGATIVE_INFINITY }
-  ).element;
-}
-// function updateLocalTodoOrder() {
-//   let todos = Array.from(todoList.children).map((todoDiv, index) => {
-//     const text = todoDiv.querySelector("li").innerText;
-//     const color = todoDiv.style.backgroundColor || "";
-//     const completed = todoDiv.classList.contains("completed");
-
-//     return { text, color, completed, index }; // Cập nhật thứ tự mới
-//   });
-
-//   localStorage.setItem("todos", JSON.stringify(todos));
-// }
-
-// Cập nhật thứ tự trong localStorage sau khi kéo thả
-function updateLocalTodoOrder() {
-  const todos = [];
-  const todoElements = todoList.querySelectorAll(".todo");
-
-  todoElements.forEach((todoDiv, index) => {
-    const text = todoDiv.querySelector("li").innerText;
-    const time = todoDiv.querySelector("span").innerText;
-    const color = todoDiv.style.backgroundColor || "";
-    const completed = todoDiv.classList.contains("completed");
-
-    todos.push({
-      text: text,
-      time: time,
-      color: color,
-      completed: completed,
-      index: index, // Lưu thứ tự mới
-    });
-  });
-
-  // Lưu danh sách đã sắp xếp vào localStorage
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
-
 const drop = (e) => {
   e.preventDefault();
   let newX = isTouchDevice() ? e.touches[0].clientX : e.clientX;
@@ -546,9 +451,6 @@ const drop = (e) => {
     } else {
       targetElement.insertAdjacentElement("beforebegin", currentElement);
     }
-
-    // Sau khi kéo thả xong, lưu thứ tự vào localStorage
-    updateLocalTodoOrder();
   }
 
   initialX = newX;
