@@ -127,6 +127,16 @@ function addTodo(event) {
     });
 
     //ADDING TO LOCAL STORAGE
+    // Tạo nút Edit
+    const editButton = document.createElement("button");
+    editButton.innerHTML = '<i class="fa-solid fa-pen"></i>';
+    editButton.classList.add("edit-btn");
+    todoDiv.appendChild(editButton);
+
+    // Xử lý sự kiện nhấn nút Edit
+    editButton.addEventListener("click", () => {
+      editTodo(todoDiv, newTodo);
+    });
     // saveLocalTodos(todoInput.value);
     const completedButton = document.createElement("button");
     completedButton.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
@@ -252,11 +262,23 @@ function getLocalTodos() {
     // Tạo lại các nút trạng thái
     createStatusButtons(todoDiv, todo.text);
 
+    // Tạo nút Edit
+    const editButton = document.createElement("button");
+    editButton.innerHTML = '<i class="fa-solid fa-pen"></i>';
+    editButton.classList.add("edit-btn");
+    todoDiv.appendChild(editButton);
+
+    // Xử lý sự kiện nhấn nút Edit
+    editButton.addEventListener("click", () => {
+      editTodo(todoDiv, newTodo);
+    });
+
+    // Tạo nút hoàn thành và nút xóa
     const completedButton = document.createElement("button");
     completedButton.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
     completedButton.classList.add("complete-btn");
     todoDiv.appendChild(completedButton);
-
+    //xóa
     const trashButton = document.createElement("button");
     trashButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     trashButton.classList.add("trash-btn");
@@ -353,6 +375,49 @@ function filterByColor(color) {
       todo.style.display = "none"; // Ẩn các to-do không đúng màu
     }
   });
+}
+
+function editTodo(todoDiv, newTodo) {
+  // Tạo một input để thay đổi nội dung
+  const editInput = document.createElement("input");
+  editInput.type = "text";
+  editInput.value = newTodo.innerText; // Hiển thị nội dung hiện tại
+
+  // Thay thế nội dung hiện tại bằng input
+  todoDiv.replaceChild(editInput, newTodo);
+
+  // Tạo nút lưu (Save)
+  const saveButton = document.createElement("button");
+  saveButton.innerHTML = '<i class="fa-solid fa-save"></i>';
+  saveButton.classList.add("save-btn");
+  todoDiv.appendChild(saveButton);
+
+  // Khi người dùng nhấn Save
+  saveButton.addEventListener("click", () => {
+    const updatedText = editInput.value; // Lấy nội dung mới
+
+    if (updatedText) {
+      newTodo.innerText = updatedText; // Cập nhật nội dung trên giao diện
+      todoDiv.replaceChild(newTodo, editInput); // Trả lại thẻ <li> sau khi chỉnh sửa
+      todoDiv.removeChild(saveButton); // Xóa nút Save sau khi hoàn thành
+
+      // Cập nhật lại localStorage
+      updateLocalTodoText(newTodo.innerText, updatedText);
+    } else {
+      alert("Nội dung không được để trống!");
+    }
+  });
+}
+function updateLocalTodoText(oldText, newText) {
+  let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+  todos.forEach((todo) => {
+    if (todo.text === oldText) {
+      todo.text = newText; // Cập nhật nội dung mới
+    }
+  });
+
+  localStorage.setItem("todos", JSON.stringify(todos));
 }
 
 // Thêm sự kiện cho các nút màu

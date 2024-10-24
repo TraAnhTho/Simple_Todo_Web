@@ -153,6 +153,8 @@ form button:hover {
   flex: 1;
 }
 
+.edit-btn,
+.save-btn,
 .trash-btn,
 .complete-btn {
   color: white;
@@ -160,6 +162,12 @@ form button:hover {
   padding: 1rem;
   cursor: pointer;
   font-size: 1.5rem;
+}
+
+.edit-btn,
+.save-btn {
+  background: gray;
+  width: 3.5rem;
 }
 
 .complete-btn {
